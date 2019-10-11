@@ -7,10 +7,6 @@
 **/.project
 **/.metadata
 **/test-output
-/admin-web/node
-/admin-web/node_modules
-/portal-web/node
-/portal-web/node_modules
 
 # Compiled class file
 *.class

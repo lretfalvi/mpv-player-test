@@ -15,6 +15,8 @@ import javafx.stage.StageStyle;
 
 public class SampleMPVPlayer extends Application {
     private static final String STAGE_TITLE = "MPV video demo";
+    private MPV mpv;
+    private long handle;
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -31,6 +33,7 @@ public class SampleMPVPlayer extends Application {
 
         button.setStyle("-fx-font-size: 50px");
         button.setOpacity(0.5);
+        button.setOnAction(e -> pause());
 
         scene.setFill(Color.TRANSPARENT);
 
@@ -44,10 +47,10 @@ public class SampleMPVPlayer extends Application {
 
     private void play(String url) {
         // Get interface to MPV DLL
-        MPV mpv = MPV.INSTANCE;
+        mpv = MPV.INSTANCE;
 
         // Create MPV player instance
-        long handle = mpv.mpv_create();
+        handle = mpv.mpv_create();
 
         // Get the native window id by looking up a window by title:
         WinDef.HWND hwnd = User32.INSTANCE.FindWindow(null, STAGE_TITLE);
@@ -68,5 +71,10 @@ public class SampleMPVPlayer extends Application {
         if((error = mpv.mpv_command(handle, new String[] {"loadfile", url})) != 0) {
             throw new IllegalStateException("Playback failed with error: " + error);
         }
+    }
+
+    private void pause() {
+        String[] args = new String[]{"cycle", "pause"};
+        mpv.mpv_command(handle, args);
     }
 }
